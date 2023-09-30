@@ -102,7 +102,6 @@ jobs:
           REPOSITORY: frontend
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          echo $REGISTRY/$REPOSITORY:$IMAGE_TAG
           cd starter/frontend/k8s
           kustomize edit set image frontend=$REGISTRY/$REPOSITORY:$IMAGE_TAG
 
