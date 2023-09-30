@@ -21,6 +21,11 @@ jobs:
 
       - name: Cache dependencies
         uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: cd starter/frontend && npm ci
@@ -42,6 +47,11 @@ jobs:
 
       - name: Cache dependencies
         uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: cd starter/frontend && npm ci
@@ -65,6 +75,11 @@ jobs:
 
       - name: Cache dependencies
         uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: cd starter/frontend && npm ci
