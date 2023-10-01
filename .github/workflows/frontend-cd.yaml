@@ -136,7 +136,6 @@ jobs:
         run: |
           if kubectl rollout status deployment/frontend -n default --timeout=2m | grep -q 'deployment "frontend" successfully rolled out'; then
             echo "Deployment succeeded."
-            exit 1
           else
             echo "Deployment failed."
             exit 1
