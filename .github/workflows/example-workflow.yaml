@@ -1,0 +1,25 @@
+name: Example Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-variable:
+    runs-on: ubuntu-latest
+    outputs:
+      my_variable: ${{ steps.set-variable.outputs.my_variable }}
+    steps:
+      - name: Set a variable
+        id: set-variable
+        run: echo "::set-output name=my_variable::Hello from Job 1"
+
+  use-variable:
+    runs-on: ubuntu-latest
+    needs: create-variable
+    steps:
+      - name: Use the variable
+        env:
+          MY_VARIABLE: ${{ needs.create-variable.outputs.my_variable }}
+        run: echo "Variable from Job 1 is $MY_VARIABLE"
