@@ -9,11 +9,10 @@ jobs:
   create-variable:
     runs-on: ubuntu-latest
     outputs:
-      my_variable: ${{ steps.set-variable.outputs.my_variable }}
+      my_variable: Variable_from_job_1
     steps:
       - name: Set a variable
-        id: set-variable
-        run: echo "::set-output name=my_variable::Hello from Job 1"
+        run: echo "$my_variable"
 
   use-variable:
     runs-on: ubuntu-latest
