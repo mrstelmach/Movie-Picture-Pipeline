@@ -11,7 +11,7 @@ jobs:
     steps:
       - id: step1
         env:
-          $VAR: hello
+          VAR: hello
         run: echo "test=$VAR" >> "$GITHUB_OUTPUT"
 
   job2:
