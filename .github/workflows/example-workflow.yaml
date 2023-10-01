@@ -8,11 +8,13 @@ on:
 jobs:
   create-variable:
     runs-on: ubuntu-latest
+    env:
+      VARIABLE: Variable_from_job_1
     outputs:
-      my_variable: Variable_from_job_1
+      my_variable: $VARIABLE
     steps:
       - name: Set a variable
-        run: echo "$my_variable"
+        run: echo "$VARIABLE"
 
   use-variable:
     runs-on: ubuntu-latest
