@@ -69,6 +69,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: Staging
     needs: [lint, test]
+    outputs:
+      ecr-registry: ${{ steps.login-ecr.outputs.registry }}
 
     steps:
       - name: Checkout code
@@ -90,8 +92,6 @@ jobs:
       - name: Build, tag, and push docker image to Amazon ECR
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        outputs:
-          REGISTRY: ${{ env.REGISTRY }}
         run: |
           cd starter/frontend
           docker build --build-arg=REACT_APP_MOVIE_API_URL=${{ vars.REACT_APP_MOVIE_API_URL }} --tag=$REGISTRY/$REPOSITORY:$IMAGE_TAG .
@@ -118,7 +118,7 @@ jobs:
 
       - name: Kustomize set image
         env:
-          REGISTRY: ${{ needs.build.outputs.REGISTRY }}
+          REGISTRY: ${{ needs.build.outputs.ecr-registry }}
         run: |
           cd starter/frontend/k8s
           kustomize edit set image frontend=$REGISTRY/$REPOSITORY:$IMAGE_TAG
