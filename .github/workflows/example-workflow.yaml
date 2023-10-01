@@ -11,7 +11,7 @@ jobs:
     env:
       VARIABLE: Variable_from_job_1
     outputs:
-      my_variable: $VARIABLE
+      my_variable: ${{ env.VARIABLE }}
     steps:
       - name: Set a variable
         run: echo "$VARIABLE"
