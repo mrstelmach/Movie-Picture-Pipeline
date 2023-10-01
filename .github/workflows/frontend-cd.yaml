@@ -68,6 +68,8 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    environment: Staging
+
     needs: [lint, test]
 
     steps:
