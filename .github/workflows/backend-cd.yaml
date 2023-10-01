@@ -53,8 +53,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: Staging
     needs: [lint, test]
-    outputs:
-      ecr-registry: ${{ steps.login-ecr.outputs.ecr-registry }}
 
     steps:
       - name: Checkout code
@@ -77,7 +75,6 @@ jobs:
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          echo "ecr-registry=$REGISTRY" >> "$GITHUB_OUTPUT"
           cd starter/backend
           docker build --tag=$REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
@@ -98,12 +95,18 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: 'true'
+
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --region us-east-1 --name ${{ vars.CLUSTER_NAME }}
 
       - name: Kustomize set image
         env:
-          REGISTRY: ${{ needs.build.outputs.ecr-registry }}
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           cd starter/backend/k8s
           kustomize edit set image backend=$REGISTRY/$REPOSITORY:$IMAGE_TAG
