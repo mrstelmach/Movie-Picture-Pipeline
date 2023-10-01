@@ -8,6 +8,10 @@ on:
       - 'starter/frontend/**'
   workflow_dispatch:
 
+env:
+  REPOSITORY: frontend
+  IMAGE_TAG: ${{ github.sha }}
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -86,8 +90,6 @@ jobs:
       - name: Build, tag, and push docker image to Amazon ECR
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: frontend
-          IMAGE_TAG: ${{ github.sha }}
         run: |
           cd starter/frontend
           docker build --build-arg=REACT_APP_MOVIE_API_URL=http://localhost:5000 --tag=$REGISTRY/$REPOSITORY:$IMAGE_TAG .
@@ -99,8 +101,6 @@ jobs:
       - name: Kustomize set image
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: frontend
-          IMAGE_TAG: ${{ github.sha }}
         run: |
           cd starter/frontend/k8s
           kustomize edit set image frontend=$REGISTRY/$REPOSITORY:$IMAGE_TAG
